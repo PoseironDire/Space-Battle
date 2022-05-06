@@ -16,6 +16,6 @@ public class CameraFollow : MonoBehaviour
     void FixedUpdate()
     {
         transform.position = Vector3.SmoothDamp(transform.position, cameraPosition.position, ref velocity, 0.001f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, sight.rotation, 0.75f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, sight.rotation, 0.25f);
     }
 }

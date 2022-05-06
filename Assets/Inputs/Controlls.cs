@@ -317,6 +317,15 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3e4cca3-ed98-43c9-ae64-7160780cf324"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -594,6 +603,28 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
                     ""action"": ""Lift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5bd5e7dd-cbb8-45e1-aba4-d39d03a12c2a"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2b8b610-0305-4826-b234-f41a05e20773"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1188,6 +1219,7 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
         m_Ship_Look = m_Ship.FindAction("Look", throwIfNotFound: true);
         m_Ship_Use = m_Ship.FindAction("Use", throwIfNotFound: true);
         m_Ship_Lift = m_Ship.FindAction("Lift", throwIfNotFound: true);
+        m_Ship_Toggle = m_Ship.FindAction("Toggle", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1312,6 +1344,7 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_Look;
     private readonly InputAction m_Ship_Use;
     private readonly InputAction m_Ship_Lift;
+    private readonly InputAction m_Ship_Toggle;
     public struct ShipActions
     {
         private @Controlls m_Wrapper;
@@ -1320,6 +1353,7 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Ship_Look;
         public InputAction @Use => m_Wrapper.m_Ship_Use;
         public InputAction @Lift => m_Wrapper.m_Ship_Lift;
+        public InputAction @Toggle => m_Wrapper.m_Ship_Toggle;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1341,6 +1375,9 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
                 @Lift.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLift;
                 @Lift.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLift;
                 @Lift.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLift;
+                @Toggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggle;
+                @Toggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggle;
+                @Toggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggle;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -1357,6 +1394,9 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
                 @Lift.started += instance.OnLift;
                 @Lift.performed += instance.OnLift;
                 @Lift.canceled += instance.OnLift;
+                @Toggle.started += instance.OnToggle;
+                @Toggle.performed += instance.OnToggle;
+                @Toggle.canceled += instance.OnToggle;
             }
         }
     }
@@ -1523,6 +1563,7 @@ public partial class @Controlls : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnUse(InputAction.CallbackContext context);
         void OnLift(InputAction.CallbackContext context);
+        void OnToggle(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
